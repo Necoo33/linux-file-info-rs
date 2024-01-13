@@ -1,0 +1,20 @@
+[package]
+name = "linux-file-info"
+version = "0.1.0"
+authors = ["Necdet Arda Etiman"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/Necoo33/linux-file-info-rs"
+categories = ["data-structures", "no-std", "filesystem", "os::linux-apis"]
+keywords = ["linux", "filesystem", "permission", "owner", "size"]
+edition = "2021"
+description = "This crate is for gathering useful infos about linux entities(files, folders or symlinks) with developer friendly way."
+
+
+[lib]
+name = "linux_file_info"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
