@@ -53,7 +53,7 @@ fn main(){
 
 ```
 
-Warning: That functions work based on your location. For example, if you run `check_current_folder()` function on root directory of your computer, you'll take this kind of response: 
+Warning: `check_current_folder()` function works based on your current directory. If you run this on root directory of your computer, you'll take this kind of response: 
 
 ```rust
 
@@ -153,4 +153,9 @@ Another Example, if you run `check_other_folder()` function on your computer's m
 
 ```
 
-Because of that, i'd recommend to use that functions with defining some kind of path variables and giving some kind of absolute path, for example "$HOME".
+You have 2 options for giving absolute and more reliable paths:
+
+1 - You can give absolute path on the parameter like this: `check_other_folder("/sys/dev/block")`, `check_file("/sys/dev/block/1:0")`
+
+2 - You can use that functions with defining some kind of path variables and giving some kind of absolute path, for example "$HOME".
+
