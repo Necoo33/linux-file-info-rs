@@ -33,7 +33,7 @@ fn main(){
     // assuming you have "hello-everyone" folder near to the that project file:
     let other_folder = other_folder_info("../hello-everyone");
 
-    // checking /etc/nftables.conf file with absolute path:
+    // checking /etc/nftables.conf file with absolute path. It also gets info of symlinks:
     let check_cargo_file = file_info("/etc/nftables.conf");
 
     // checking if Cargo.toml is file:
