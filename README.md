@@ -28,13 +28,13 @@ sample uses:
 use linux_file_info::*;
 
 fn main(){
-    let current_folder = check_current_folder();
+    let current_folder = current_folder_info();
 
     // assuming you have "hello-everyone" folder near to the that project file:
-    let other_folder = check_other_folder("../hello-everyone");
+    let other_folder = other_folder_info("../hello-everyone");
 
-    // checking Cargo.toml file:
-    let check_cargo_file = check_file("Cargo.toml");
+    // checking /etc/nftables.conf file with absolute path:
+    let check_cargo_file = file_info("/etc/nftables.conf");
 
     // checking if Cargo.toml is file:
     let cargo_toml_is_file = is_file("Cargo.toml");
@@ -53,7 +53,7 @@ fn main(){
 
 ```
 
-Warning: `check_current_folder()` function works based on your current directory. If you run this on root directory of your computer, you'll take this kind of response: 
+Warning: `current_folder_info()` function works based on your current directory. If you run this on root directory of your computer, you'll take this kind of response: 
 
 ```rust
 
@@ -124,7 +124,7 @@ Warning: `check_current_folder()` function works based on your current directory
 
 ```
 
-Another Example, if you run `check_other_folder()` function on your computer's main directory with "./etc/ssh" parameter you'll take that kind of answer:
+Another Example, if you run `other_folder_info()` function on your computer's main directory with "./etc/ssh" parameter you'll take that kind of answer:
 
 ```rust
 
@@ -155,7 +155,7 @@ Another Example, if you run `check_other_folder()` function on your computer's m
 
 You have 2 options for giving absolute and more reliable paths:
 
-1 - You can give absolute path on the parameter like this: `check_other_folder("/sys/dev/block")`, `check_file("/sys/dev/block/1:0")`
+1 - You can give absolute path on the parameter like this: `other_folder_info("/sys/dev/block")`, `file_info("/sys/dev/block/1:0")`
 
 2 - You can use that functions with defining some kind of path variables and giving some kind of absolute path, for example "$HOME".
 
