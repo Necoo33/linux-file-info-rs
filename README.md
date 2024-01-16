@@ -30,7 +30,7 @@ use linux_file_info::*;
 fn main(){
     let current_folder = current_folder_info();
 
-    // assuming you have "hello-everyone" folder near to the that project file:
+    // assuming you have "hello-everyone" folder near to the that project's folder:
     let other_folder = other_folder_info("../hello-everyone");
 
     // checking /etc/nftables.conf file with absolute path. It also gets info of symlinks:

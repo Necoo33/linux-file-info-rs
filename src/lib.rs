@@ -15,6 +15,7 @@ pub struct LinuxEntity {
 }
 
 #[cfg(target_os = "linux")]
+#[derive(Debug)]
 pub struct Permissions<'a> {
     pub entity_type: &'a str,
     pub permission: u16
@@ -134,8 +135,18 @@ pub fn file_info(path: &str) -> Result<LinuxEntity, Error> {
 
     let perm_str = decode_permission_string(split_the_output[0]);
 
+    let file_name;
+    
+    if split_the_output[8].contains("/") {
+        let split_the_file_name: Vec<&str> = split_the_output[8].split("/").collect();
+        
+        file_name = split_the_file_name.last().unwrap().to_string();
+    } else {
+        file_name = split_the_output[8].to_string()
+    }
+
     Ok(LinuxEntity {
-        entity_name: split_the_output[8].to_string(),
+        entity_name: file_name,
         entity_type: perm_str.entity_type.to_string(),
         permission: perm_str.permission,
         owner: split_the_output[2].to_string(),
@@ -189,6 +200,8 @@ pub fn is_exist(path: &str) -> bool {
         false
     }
 }
+
+
 
 // şimdi yukarıdaki ufule'nin yapdığının aynısını tek bir başka bir klasör ve bir dosya için
 // yapan ufuleleri de yaz.
