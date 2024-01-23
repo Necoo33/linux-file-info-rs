@@ -202,9 +202,19 @@ pub fn is_exist(path: &str) -> bool {
 }
 
 
+#[cfg(target_os = "linux")]
+pub fn get_current_user() -> String {
+    let find_user_command = Command::new("whoami").output();
 
-// şimdi yukarıdaki ufule'nin yapdığının aynısını tek bir başka bir klasör ve bir dosya için
-// yapan ufuleleri de yaz.
+    return match find_user_command {
+        Ok(user) => from_utf8(&user.stdout).unwrap().trim().to_string(),
+        Err(error) => {
+            eprintln!("cannot check the user because of that: {}", error);
+
+            "".to_string()
+        }
+    }
+}
 
 #[cfg(target_os = "linux")]
 #[cfg(test)]
@@ -253,4 +263,10 @@ mod tests {
     fn test_is_exist(){
         assert_eq!(false, is_exist("dfsgdfsgd"))
     }
+
+    #[test]
+    fn test_get_current_user(){
+        assert_eq!(true, get_current_user().is_ok())
+    }
+
 }

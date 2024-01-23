@@ -2,7 +2,11 @@
 
 This crate is for gathering useful infos about linux entities(files, folders or symlinks) with developer friendly way.
 
+This crate is parallel crate of [windows-file-info](https://crates.io/crates/windows-file-info) crate, which developed for handling same tasks on windows and developed by me. If you need an entity inspector for Windows, check out that crate.
+
 It basically makes "sudo ls -l" calls with different ways and parses output nicely.
+
+If you like that crate, give a star that liblary on [github repo](https://github.com/Necoo33/linux-file-info-rs)
 
 It primarily uses that struct about all entities:
 
@@ -23,6 +27,8 @@ pub struct LinuxEntity {
 ```
 
 sample uses:
+
+Disclaimer: You can give absolute paths to all `other_folder_info()` and `file_info()` and other functions.
 
 ```rust
 use linux_file_info::*;
@@ -48,15 +54,17 @@ fn main(){
     // checking if sfsdfsfds is exist:
     let sfsdfsfds_is_exist = is_exist("sfsdfsfds");
 
+    // checking the current user:
+    let who_am_i = get_current_user();
+
 
 }
 
 ```
 
-Warning: `current_folder_info()` function works based on your current directory. If you run this on root directory of your computer, you'll take this kind of response: 
+Warning: `current_folder_info()` function works based on your current directory. If you run this on root directory of your computer, you'll take this kind of response:
 
 ```rust
-
 [
     LinuxEntity {
         entity_name: "Docker",
@@ -157,5 +165,4 @@ You have 2 options for giving absolute and more reliable paths:
 
 1 - You can give absolute path on the parameter like this: `other_folder_info("/sys/dev/block")`, `file_info("/sys/dev/block/1:0")`
 
-2 - You can use that functions with defining some kind of path variables and giving some kind of absolute path, for example "$HOME".
-
+2 - You can use that functions with defining some kind of bash variables which equals some paths(like your current user's home folder or /root folder) and giving other paths depending on that variable.
