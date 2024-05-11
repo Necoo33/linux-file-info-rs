@@ -217,6 +217,70 @@ pub fn get_current_user() -> String {
 }
 
 #[cfg(target_os = "linux")]
+pub fn find_file_return_path(file_name: &str) -> std::result::Result<Vec<String>, std::io::Error> {
+    let find_command = std::process::Command::new("find").arg("/").arg("-type").arg("f").arg("-name").arg(file_name).output();
+
+    match find_command {
+        Ok(answer) => {
+            let parse_answer = std::str::from_utf8(&answer.stdout).unwrap();
+
+            let mut files_array = vec![];
+
+            for file in parse_answer.lines() {
+                if file != "" {
+                    files_array.push(file.to_string());
+                }
+            }
+
+            
+            match files_array.len() {
+                0 => {
+            return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "there is no file has that name".to_string()));
+                },
+                _ => return Ok(files_array)
+            }
+        },
+        Err(error) => {
+            println!("{}", error);
+
+            return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "there is no file has that name".to_string()))
+        }
+    }
+}
+
+
+#[cfg(target_os = "linux")]
+pub fn find_file_in_custom_dir_and_return_path(dir: &str, file_name: &str) -> std::result::Result<Vec<String>, std::io::Error> {
+    let find_command = std::process::Command::new("find").arg(dir).arg("-type").arg("f").arg("-name").arg(file_name).output();
+
+    match find_command {
+        Ok(answer) => {
+            let parse_answer = std::str::from_utf8(&answer.stdout).unwrap();
+
+            let mut files_array = vec![];
+
+            for file in parse_answer.lines() {
+                if file != "" {
+                    files_array.push(file.to_string());
+                }
+            }
+
+            match files_array.len() {
+                0 => {
+            return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "there is no file has that name".to_string()));
+                },
+                _ => return Ok(files_array)
+            }
+        },
+        Err(error) => {
+            println!("{}", error);
+
+            return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "there is no file has that name".to_string()))
+        }
+    }
+}
+
+#[cfg(target_os = "linux")]
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -241,7 +305,7 @@ mod tests {
 
     #[test]
     fn test_file_info(){
-        println!("Check 1:0 file: {:#?}", file_info("/sys/dev/block/1:0"))
+        println!("Check passwd file: {:#?}", file_info("/etc/passwd"))
     }
 
     #[test]
@@ -254,6 +318,9 @@ mod tests {
         assert_eq!(false, is_folder("Cargo.toml"))
     }
 
+    // you have to so this test with finding a symlink in your computer and writing it's absolute
+    // path.
+
     #[test]
     fn test_is_symlink(){
         assert_eq!(true, is_symlink("/sys/dev/block/1:0"))
@@ -265,8 +332,9 @@ mod tests {
     }
 
     #[test]
-    fn test_get_current_user(){
-        assert_eq!(true, get_current_user().is_ok())
+    fn test_find_file_return_path(){
+        assert_eq!(true, find_file_return_path("cargo").is_ok());
+        assert_eq!(false, find_file_return_path("hdichurhfhdhdj").is_ok());
     }
 
 }
