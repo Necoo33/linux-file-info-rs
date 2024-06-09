@@ -281,6 +281,71 @@ pub fn find_file_in_custom_dir_and_return_path(dir: &str, file_name: &str) -> st
 }
 
 #[cfg(target_os = "linux")]
+pub fn find_folder_return_path(folder_name: &str) -> std::result::Result<Vec<String>, std::io::Error> {
+    let find_command = std::process::Command::new("find").arg("/").arg("-type").arg("d").arg("-name").arg(folder_name).output();
+
+    match find_command {
+        Ok(answer) => {
+            let parse_answer = std::str::from_utf8(&answer.stdout).unwrap();
+
+            let mut folders_array = vec![];
+
+            for folder in parse_answer.lines() {
+                if folder != "" {
+                    folders_array.push(folder.to_string());
+                }
+            }
+
+            
+            match folders_array.len() {
+                0 => {
+            return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "there is no folder has that name".to_string()));
+                },
+                _ => return Ok(folders_array)
+            }
+        },
+        Err(error) => {
+            println!("{}", error);
+
+            return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "there is no folder has that name".to_string()))
+        }
+    }
+}
+
+#[cfg(target_os = "linux")]
+pub fn find_folder_in_custom_dir_and_return_path(dir: &str, folder_name: &str) -> std::result::Result<Vec<String>, std::io::Error> {
+    let find_command = std::process::Command::new("find").arg(dir).arg("-type").arg("d").arg("-name").arg(folder_name).output();
+
+    match find_command {
+        Ok(answer) => {
+            let parse_answer = std::str::from_utf8(&answer.stdout).unwrap();
+
+            let mut folders_array = vec![];
+
+            for folder in parse_answer.lines() {
+                if folder != "" {
+                    folders_array.push(folder.to_string());
+                }
+            }
+
+            
+            match folders_array.len() {
+                0 => {
+            return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "there is no folder has that name".to_string()));
+                },
+                _ => return Ok(folders_array)
+            }
+        },
+        Err(error) => {
+            println!("{}", error);
+
+            return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "there is no folder has that name".to_string()))
+        }
+    }
+}
+
+
+#[cfg(target_os = "linux")]
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -318,7 +383,7 @@ mod tests {
         assert_eq!(false, is_folder("Cargo.toml"))
     }
 
-    // you have to so this test with finding a symlink in your computer and writing it's absolute
+    // you have to do this test with finding a symlink in your computer and writing it's absolute
     // path.
 
     #[test]
@@ -335,6 +400,13 @@ mod tests {
     fn test_find_file_return_path(){
         assert_eq!(true, find_file_return_path("cargo").is_ok());
         assert_eq!(false, find_file_return_path("hdichurhfhdhdj").is_ok());
+    }
+
+
+    #[test]
+    fn test_find_folder_return_path(){
+        assert_eq!(true, find_folder_return_path("home").is_ok());
+        assert_eq!(false, find_folder_return_path("ufhfuhdh").is_ok());
     }
 
 }
